@@ -6,27 +6,27 @@ template <class T>
 class Communicator
 {
 protected:
-	bool finished;
+    bool finished;
 public:
-	Communicator()
-	{
-		this->finished = false;
-	}
+    Communicator()
+    {
+        this->finished = false;
+    }
 
-	~Communicator() {}
+    ~Communicator() {}
 
-	void finish()
-	{
-		this->finished = true;
-	}
+    void finish()
+    {
+        this->finished = true;
+    }
 
-	bool isFinished()
-	{
-		return this->finished;
-	}
-
-	void processCommand(std::string& cmd)
-	{
-		static_cast<T*>(this)->processCommandImplementation(cmd);
-	}
+    bool isFinished()
+    {
+        return this->finished;
+    }
+	
+    void processCommand(std::string& cmd)
+    {
+        static_cast<T*>(this)->processCommandImplementation(cmd);
+    }
 };
