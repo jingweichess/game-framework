@@ -43,7 +43,7 @@ public:
         this->moveHistoryList.pop_back();
     }
 
-    void reserve(const MoveHistory::size_type _Newcapacity)
+    void reserve(const size_type _Newcapacity)
     {
         this->moveHistoryList.reserve(_Newcapacity);
     }

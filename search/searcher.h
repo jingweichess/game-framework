@@ -26,12 +26,14 @@ protected:
     MoveGenerator moveGenerator;
     MoveHistory moveHistory;
 
-	NodeCount nodeCount;
+    NodeCount nodeCount;
     bool abortedSearch;
 
 public:
     using BoardType = typename Evaluator::BoardType;
+    using MoveGeneratorType = MoveGenerator;
     using MoveType = typename BoardType::MoveType;
+    using PrincipalVariationType = PrincipalVariation;
 
     Searcher()
     {
@@ -55,7 +57,7 @@ public:
         static_cast<T*>(this)->initializeSearchImplementation(board);
     }
 
-    Score iterativeDeepeningLoop(BoardType& board, PrincipalVariation& principalVariation)
+    Score iterativeDeepeningLoop(BoardType& board, PrincipalVariationType& principalVariation)
     {
         this->initializeSearch(board);
 
@@ -117,7 +119,7 @@ public:
         return bestScore;
     }
 
-	NodeCount getNodeCount()
+    NodeCount getNodeCount()
     {
         return this->nodeCount;
     }
@@ -132,7 +134,7 @@ public:
         this->moveHistory.resetHistory();
     }
 
-    Score rootSearch(BoardType& board, PrincipalVariation& principalVariation, Depth maxDepth, Score alpha, Score beta)
+    Score rootSearch(BoardType& board, PrincipalVariationType& principalVariation, Depth maxDepth, Score alpha, Score beta)
     {
         return static_cast<T*>(this)->rootSearchImplementation(board, principalVariation, maxDepth, alpha, beta);
     }

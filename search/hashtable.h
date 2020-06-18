@@ -17,42 +17,42 @@ static constexpr HashtableEntryType HASHENTRYTYPE_LOWER_BOUND = 2;
 static constexpr HashtableEntryType HASHENTRYTYPE_UPPER_BOUND = 3;
 
 struct HashtableEntry {
-	union {
-		struct {
-			Hash hashValue;
-			Score score;
-			HashtableDepth depthLeft;
-			HashtableAge age;
-			HashtableEntryType hashtableEntryType;
-			std::uint8_t custom;
-		};
+    union {
+        struct {
+            Hash hashValue;
+            Score score;
+            HashtableDepth depthLeft;
+            HashtableAge age;
+            HashtableEntryType hashtableEntryType;
+            std::uint8_t custom;
+        };
 #if defined(USE_M128I)
-		__m128i vector;
+        __m128i vector;
 #endif
-	};
+    };
 };
 
 class Hashtable
 {
 protected:
-	HashtableEntry* hashEntryList = nullptr;
+    HashtableEntry* hashEntryList = nullptr;
 
-	std::uint32_t hashEntryCount;
-	HashtableAge currentAge;
+    std::uint32_t hashEntryCount;
+    HashtableAge currentAge;
 public:
-	Hashtable();
-	~Hashtable();
+    Hashtable();
+    ~Hashtable();
 
-	void incrementAge();
+    void incrementAge();
 
-	void initialize(std::uint32_t entryCount);
+    void initialize(std::uint32_t entryCount);
 
-	void insert(Hash hashValue, Score score, Depth currentDepth, Depth depthLeft, HashtableEntryType hashtableEntryType, std::uint8_t custom);
+    void insert(Hash hashValue, Score score, Depth currentDepth, Depth depthLeft, HashtableEntryType hashtableEntryType, std::uint8_t custom);
 
-	void reset();
+    void reset();
 
-	Score scoreFromHash(Score score, Depth currentDepth);
-	Score scoreToHash(Score score, Depth currentDepth);
+    Score scoreFromHash(Score score, Depth currentDepth);
+    Score scoreToHash(Score score, Depth currentDepth);
 
-	HashtableEntryType search(Hash hashValue, Score& score, Depth currentDepth, Depth& depthLeft, std::uint8_t& custom);
+    HashtableEntryType search(Hash hashValue, Score& score, Depth currentDepth, Depth& depthLeft, std::uint8_t& custom);
 };

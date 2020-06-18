@@ -3,10 +3,10 @@
 #include "hash.h"
 
 struct DefaultBookPosition {
-	Hash hashValue;
+    Hash hashValue;
 };
 
 static DefaultBookPosition& operator += (DefaultBookPosition& bp1, DefaultBookPosition bp2)
 {
-	return bp1;
+    return bp1;
 }

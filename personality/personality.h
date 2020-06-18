@@ -7,15 +7,15 @@
 
 class Personality {
 protected:
-	std::map<std::string, Score> parameterList;
+    std::map<std::string, Score> parameterList;
 public:
-	using iterator = typename std::map<std::string, Score>::iterator;
+    using iterator = typename std::map<std::string, Score>::iterator;
 
-	Personality();
-	~Personality();
+    Personality();
+    ~Personality();
 
-	iterator begin();
-	iterator end();
+    iterator begin();
+    iterator end();
 
-	void setParameter(std::string& name, Score score);
+    void setParameter(std::string& name, Score score);
 };

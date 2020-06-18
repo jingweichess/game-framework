@@ -14,169 +14,169 @@ template <class T, class Searcher, class GameResult>
 class Player
 {
 protected:
-	std::vector<typename Searcher::BoardType> boardList;
-	std::uint32_t currentBoard;
+    std::vector<typename Searcher::BoardType> boardList;
+    std::uint32_t currentBoard;
 
-	Clock clock;
-	ParameterMap parameterMap;
-	Personality personality;
+    Clock clock;
+    ParameterMap parameterMap;
+    Personality personality;
 
-	Searcher searcher;
+    Searcher searcher;
 
-	typename Searcher::BoardType& getCurrentBoard()
-	{
-		return this->boardList[this->currentBoard];
-	}
+    typename Searcher::BoardType& getCurrentBoard()
+    {
+        return this->boardList[this->currentBoard];
+    }
 public:
-	using BoardType = typename Searcher::BoardType;
-	using GameResultType = GameResult;
-	using MoveGeneratorType = typename Searcher::MoveGeneratorType;
-	using MoveType = typename Searcher::MoveType;
+    using BoardType = typename Searcher::BoardType;
+    using GameResultType = GameResult;
+    using MoveGeneratorType = typename Searcher::MoveGeneratorType;
+    using MoveType = typename Searcher::MoveType;
 
-	Player()
-	{
-		this->currentBoard = 0;
+    Player()
+    {
+        this->currentBoard = 0;
 
-		BoardType board;
-		this->boardList.push_back(board);
-	}
+        BoardType board;
+        this->boardList.push_back(board);
+    }
 
-	~Player() {}
+    ~Player() {}
 
-	void applyPersonality(bool strip = false)
-	{
-		std::int32_t multiplier = strip ? -1 : 1;
+    void applyPersonality(bool strip = false)
+    {
+        std::int32_t multiplier = strip ? -1 : 1;
 
-		for (Personality::iterator it = this->personality.begin(); it != this->personality.end(); ++it) {
-			const std::string& name = it->first;
-			Score score = multiplier * it->second;
+        for (Personality::iterator it = this->personality.begin(); it != this->personality.end(); ++it) {
+            const std::string& name = it->first;
+            Score score = multiplier * it->second;
 
-			//First, make sure the parameter exists in case we're passed bad parameters
-			this->parameterMap[name];
+            //First, make sure the parameter exists in case we're passed bad parameters
+            this->parameterMap[name];
 
-			Score* parameterScore = this->parameterMap.find(name)->second;
-			*parameterScore += score;
-		}
+            Score* parameterScore = this->parameterMap.find(name)->second;
+            *parameterScore += score;
+        }
 
-		static_cast<T*>(this)->applyPersonalityImplementation(strip);
-	}
+        static_cast<T*>(this)->applyPersonalityImplementation(strip);
+    }
 
-	GameResultType checkBoardGameResult(BoardType& board)
-	{
-		return static_cast<T*>(this)->checkBoardGameResultImplementation(board);
-	}
+    GameResultType checkBoardGameResult(BoardType& board)
+    {
+        return static_cast<T*>(this)->checkBoardGameResultImplementation(board);
+    }
 
-	void doMove(MoveType& move)
-	{
-		BoardType nextBoard = this->boardList[this->currentBoard];
-		nextBoard.doMove(move);
+    void doMove(MoveType& move)
+    {
+        BoardType nextBoard = this->boardList[this->currentBoard];
+        nextBoard.doMove(move);
 
-		this->currentBoard++;
+        this->currentBoard++;
 
-		if (this->currentBoard >= this->boardList.size()) {
-			this->boardList.push_back(nextBoard);
-		}
-		else {
-			this->boardList[this->currentBoard] = nextBoard;
-		}
+        if (this->currentBoard >= this->boardList.size()) {
+            this->boardList.push_back(nextBoard);
+        }
+        else {
+            this->boardList[this->currentBoard] = nextBoard;
+        }
 
-		this->searcher.addMoveToHistory(nextBoard, move);
-	}
+        this->searcher.addMoveToHistory(nextBoard, move);
+    }
 
-	void getMove(MoveType& move)
-	{
-		this->applyPersonality();
+    void getMove(MoveType& move)
+    {
+        this->applyPersonality();
 
-		static_cast<T*>(this)->getMoveImplementation(move);
+        static_cast<T*>(this)->getMoveImplementation(move);
 
-		this->stripPersonality();
-	}
+        this->stripPersonality();
+    }
 
-	Clock& getClock()
-	{
-		return this->clock;
-	}
+    Clock& getClock()
+    {
+        return this->clock;
+    }
 
-	void loadPersonalityFile(std::string& personalityFileName)
-	{
-		std::fstream personalityFile;
+    void loadPersonalityFile(std::string& personalityFileName)
+    {
+        std::fstream personalityFile;
 
-		personalityFile.open(personalityFileName, std::fstream::ios_base::in);
+        personalityFile.open(personalityFileName, std::fstream::ios_base::in);
 
-		if (!personalityFile.is_open()) {
-			return;
-		}
+        if (!personalityFile.is_open()) {
+            return;
+        }
 
-		while (true) {
-			std::string parameterName;
-			Score parameterScore;
+        while (true) {
+            std::string parameterName;
+            Score parameterScore;
 
-			personalityFile >> parameterName >> parameterScore;
+            personalityFile >> parameterName >> parameterScore;
 
-			if (personalityFile.eof()) {
-				break;
-			}
+            if (personalityFile.eof()) {
+                break;
+            }
 
-			this->setParameter(parameterName, parameterScore);
-		}
+            this->setParameter(parameterName, parameterScore);
+        }
 
-		personalityFile.close();
-	}
+        personalityFile.close();
+    }
 
-	void resetSpecificPosition(std::string& fen)
-	{
-		this->currentBoard = 0;
+    void resetSpecificPosition(std::string& fen)
+    {
+        this->currentBoard = 0;
 
-		BoardType board;
-		board.resetSpecificPosition(fen);
+        BoardType board;
+        board.resetSpecificPosition(fen);
 
-		this->boardList[0] = board;
+        this->boardList[0] = board;
 
-		this->searcher.resetMoveHistory();
-	}
+        this->searcher.resetMoveHistory();
+    }
 
-	void resetStartingPosition()
-	{
-		this->currentBoard = 0;
+    void resetStartingPosition()
+    {
+        this->currentBoard = 0;
 
-		BoardType board;
-		board.resetStartingPosition();
+        BoardType board;
+        board.resetStartingPosition();
 
-		this->boardList[0] = board;
+        this->boardList[0] = board;
 
-		this->searcher.resetMoveHistory();
-	}
+        this->searcher.resetMoveHistory();
+    }
 
-	void setBoard(BoardType& board)
-	{
-		this->boardList[0] = board;
-		this->currentBoard = 0;
-	}
+    void setBoard(BoardType& board)
+    {
+        this->boardList[0] = board;
+        this->currentBoard = 0;
+    }
 
-	void setClock(Clock& clock)
-	{
-		this->clock = clock;
-	}
+    void setClock(Clock& clock)
+    {
+        this->clock = clock;
+    }
 
-	void setParameter(std::string& name, Score score)
-	{
-		this->personality.setParameter(name, score);
-	}
+    void setParameter(std::string& name, Score score)
+    {
+        this->personality.setParameter(name, score);
+    }
 
-	void setPersonality(Personality& personality)
-	{
-		this->personality = personality;
-	}
+    void setPersonality(Personality& personality)
+    {
+        this->personality = personality;
+    }
 
-	void stripPersonality()
-	{
-		this->applyPersonality(true);
-	}
+    void stripPersonality()
+    {
+        this->applyPersonality(true);
+    }
 
-	void undoMove()
-	{
-		if (this->currentBoard > 0) {
-			this->currentBoard--;
-		}
-	}
+    void undoMove()
+    {
+        if (this->currentBoard > 0) {
+        this->currentBoard--;
+        }
+    }
 };
