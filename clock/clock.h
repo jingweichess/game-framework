@@ -38,8 +38,8 @@ protected:
 
     bool handleSearchLevel(NodeCount nodeCount);
 public:
-	Clock();
-	~Clock();
+    Clock();
+    ~Clock();
 
     void initializeClock();
 
