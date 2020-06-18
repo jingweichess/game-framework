@@ -9,8 +9,8 @@ template <class T, class Board>
 class MoveGenerator
 {
 public:
-	using BoardType = typename Board;
-	using MoveType = typename Board::MoveType;
+	using BoardType = Board;
+	using MoveType = typename BoardType::MoveType;
 
 	NodeCount generateAllMoves(Board& board, MoveList<MoveType>& moveList, bool countOnly = false)
 	{

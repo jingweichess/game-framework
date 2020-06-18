@@ -18,7 +18,7 @@ protected:
 
 	BookPositionMap positionMap;
 public:
-	using BoardType = typename Board;
+	using BoardType = Board;
 	using MoveType = typename BoardType::MoveType;
 
 	using size_type = typename BookPositionMap::size_type;

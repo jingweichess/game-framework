@@ -4,11 +4,14 @@ Hashtable::Hashtable()
 {
 	this->currentAge = 0;
 	this->hashEntryCount = 0;
+	this->hashEntryList = nullptr;
 }
 
 Hashtable::~Hashtable()
 {
-
+	if (this->hashEntryList != nullptr) {
+		delete[] this->hashEntryList;
+	}
 }
 
 void Hashtable::incrementAge()
@@ -18,12 +21,14 @@ void Hashtable::incrementAge()
 
 void Hashtable::initialize(std::uint32_t entryCount)
 {
-	HashtableEntry* newHashEntryList = (HashtableEntry*)realloc(this->hashEntryList, entryCount * sizeof(HashtableEntry));
-
-	if (newHashEntryList != nullptr) {
-		this->hashEntryList = newHashEntryList;
+	if (this->hashEntryList != nullptr) {
+		delete[] this->hashEntryList;
+		this->hashEntryList = nullptr;
 	}
 
+	HashtableEntry* newHashEntryList = new HashtableEntry[entryCount];
+
+	this->hashEntryList = newHashEntryList;
 	this->hashEntryCount = entryCount;
 
 	this->reset();

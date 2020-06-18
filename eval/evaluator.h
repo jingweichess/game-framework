@@ -10,7 +10,7 @@ class Evaluator
 protected:
 
 public:
-    using BoardType = typename Board;
+    using BoardType = Board;
 
     Evaluator() {}
     ~Evaluator() {}

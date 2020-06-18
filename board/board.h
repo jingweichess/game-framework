@@ -6,7 +6,7 @@ template <class T, class Move>
 class GameBoard
 {
 public:
-    using MoveType = typename Move;
+    using MoveType = Move;
 
     GameBoard() {}
     ~GameBoard() {}

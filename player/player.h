@@ -29,7 +29,7 @@ protected:
 	}
 public:
 	using BoardType = typename Searcher::BoardType;
-	using GameResultType = typename GameResult;
+	using GameResultType = GameResult;
 	using MoveGeneratorType = typename Searcher::MoveGeneratorType;
 	using MoveType = typename Searcher::MoveType;
 
@@ -61,7 +61,7 @@ public:
 		static_cast<T*>(this)->applyPersonalityImplementation(strip);
 	}
 
-	GameResult checkBoardGameResult(BoardType& board)
+	GameResultType checkBoardGameResult(BoardType& board)
 	{
 		return static_cast<T*>(this)->checkBoardGameResultImplementation(board);
 	}

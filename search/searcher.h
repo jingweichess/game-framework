@@ -31,7 +31,6 @@ protected:
 
 public:
     using BoardType = typename Evaluator::BoardType;
-    using MoveGeneratorType = typename MoveGenerator;
     using MoveType = typename BoardType::MoveType;
 
     Searcher()

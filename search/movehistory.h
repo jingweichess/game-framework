@@ -8,8 +8,8 @@ class MoveHistory
 protected:
     std::vector<MoveHistoryStruct> moveHistoryList;
 public:
-    using BoardType = typename Board;
-    using MoveType = typename Board::MoveType;
+    using BoardType = Board;
+    using MoveType = typename BoardType::MoveType;
 
     using reverse_iterator = typename std::vector<MoveHistoryStruct>::reverse_iterator;
     using size_type = typename std::vector<MoveHistoryStruct>::size_type;
