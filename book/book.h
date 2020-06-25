@@ -8,7 +8,7 @@
 #include "../types/movelist.h"
 #include "../types/nodecount.h"
 
-template <class T, class Board, class BookPosition = DefaultBookPosition>
+template <class Board, class BookPosition = DefaultBookPosition>
 class Book {
 private:
 	using MoveListIterator = typename std::vector<typename Board::MoveType>::iterator;
