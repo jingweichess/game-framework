@@ -84,16 +84,17 @@ static Evaluation operator - (Evaluation e)
 
 static Evaluation operator * (Evaluation e, std::int32_t i)
 {
+    Evaluation result;
+
 #if defined(USE_M128I)
     __m128i ivector = _mm_setr_epi32(i, i, i, i);
 
-    Evaluation result;
     result.vector = _mm_mullo_epi32(e.vector, ivector);
+#else
+    result = Evaluation{ e.mg * i, e.eg * i };
+#endif
 
     return result;
-#else
-    return Evaluation{ e.mg * i, e.eg * i };
-#endif
 }
 
 static Evaluation operator * (std::int32_t i, Evaluation e)
@@ -103,16 +104,17 @@ static Evaluation operator * (std::int32_t i, Evaluation e)
 
 static Evaluation operator / (Evaluation e, std::int32_t i)
 {
-//#if defined(USE_M128I)
-//    __m128i ivector = _mm_setr_epi32(i, i, i, i);
+    Evaluation result;
 
-//    Evaluation result;
-//    result.vector = _mm_div_epi32(e.vector, ivector);
+#if defined(USE_M128I) and defined(_MSC_VER)
+    __m128i ivector = _mm_setr_epi32(i, i, i, i);
 
-//    return result;
-//#else
-    return Evaluation{ e.mg / i, e.eg / i };
-//#endif
+    result.vector = _mm_div_epi32(e.vector, ivector);
+#else
+    result = Evaluation{ e.mg / i, e.eg / i };
+#endif
+
+    return result;
 }
 
 static bool operator == (Evaluation e1, Evaluation e2)
