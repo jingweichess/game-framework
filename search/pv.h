@@ -16,6 +16,8 @@ class PrincipalVariation
 protected:
     MoveList<Move> moveList;
 public:
+    using MoveType = Move;
+
     using iterator = typename MoveList<Move>::iterator;
     using size_type = typename MoveList<Move>::size_type;
 
@@ -34,7 +36,7 @@ public:
         this->moveList.clear();
     }
 
-    void copyBackward(PrincipalVariation<T, Move>& principalVariation, Move& move)
+    void copyBackward(PrincipalVariation<T, MoveType>& principalVariation, MoveType& move)
     {
         this->moveList = principalVariation.moveList;
         this->moveList.insert(this->moveList.begin(), move);
@@ -51,7 +53,7 @@ public:
         }
     }
 
-    void printMoveToConsole(Move& move)
+    void printMoveToConsole(MoveType& move)
     {
         static_cast<T*>(this)->printMoveToConsoleImplementation(move);
     }
@@ -61,17 +63,17 @@ public:
         return this->moveList.size();
     }
 
-    void stringToMove(std::string& moveString, Move& move)
+    void stringToMove(std::string& moveString, MoveType& move)
     {
         static_cast<T*>(this)->stringToMoveImplementation(moveString, move);
     }
 
-    Move& operator[](const size_type _Pos)
+    MoveType& operator[](const size_type _Pos)
     {
         return this->moveList[_Pos];
     }
 
-    const Move& operator[](const size_type _Pos) const
+    const MoveType& operator[](const size_type _Pos) const
     {
         return this->moveList[_Pos];
     }

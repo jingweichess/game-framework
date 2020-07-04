@@ -7,7 +7,7 @@
 
 #include "../player/player.h"
 
-template <class T, class Communicator>
+template <class Communicator>
 class Engine
 {
 protected:

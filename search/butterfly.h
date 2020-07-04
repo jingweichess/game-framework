@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-template <class T, std::uint32_t width, std::uint32_t height>
+template <std::uint32_t width, std::uint32_t height>
 class ButterflyTable
 {
 protected:

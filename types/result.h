@@ -23,4 +23,4 @@ struct TwoPlayerGameSetResult {
 
 typedef std::uint32_t GameResultCount;
 
-constexpr GameResultCount ZeroGameResultCount = 0;
+constexpr GameResultCount ZeroGameResultCount = GameResultCount(0);
