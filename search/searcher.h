@@ -61,7 +61,7 @@ public:
     {
         this->initializeSearch(board);
 
-        Score aspirationWindowDelta = Score(40);
+        Score aspirationWindowDelta;
 
         Score previousScore = NO_SCORE;
         Score alpha = -WIN_SCORE, beta = WIN_SCORE;
@@ -76,21 +76,41 @@ public:
             if (enableAspirationWindow
                 && !foundMateSolution
                 && (searchDepth >= Depth::ONE * 3)) {
+                aspirationWindowDelta = Score(40);
+
                 alpha = std::max(previousScore - aspirationWindowDelta, -WIN_SCORE);
                 beta = std::min(previousScore + aspirationWindowDelta, WIN_SCORE);
             }
             else if (foundMateSolution) {
-                alpha = -WIN_SCORE;
-                beta = previousScore + 1;
+                if (previousScore > WIN_SCORE - Depth::MAX) {
+                    alpha = WIN_SCORE - Depth::MAX;
+                    beta = WIN_SCORE;
+                }
+                else {
+                    alpha = -WIN_SCORE;
+                    beta = -WIN_SCORE + Depth::MAX;
+                }
             }
 
             Score score = this->rootSearch(board, principalVariation, searchDepth, alpha, beta);
             foundMateSolution = IsMateScore(score);
 
             while (enableAspirationWindow
-                && !foundMateSolution
-                && !this->wasSearchAborted()) {
-                if (score <= alpha) {
+//                && !foundMateSolution
+                && !this->wasSearchAborted()
+                && (score <= alpha || score >= beta)) {
+
+                if (foundMateSolution) {
+                    if (score > WIN_SCORE - Depth::MAX) {
+                        alpha = WIN_SCORE - Depth::MAX;
+                        beta = WIN_SCORE;
+                    }
+                    else {
+                        alpha = -WIN_SCORE;
+                        beta = -WIN_SCORE + Depth::MAX;
+                    }
+                }
+                else if (score <= alpha) {
                     alpha = std::max(score - aspirationWindowDelta, -WIN_SCORE);
                 }
                 else if (score >= beta) {
@@ -105,6 +125,7 @@ public:
 
                 aspirationWindowDelta += Score(40);
             }
+
 
             if (this->wasSearchAborted()) {
                 break;
