@@ -46,9 +46,12 @@ public:
     std::time_t getElapsedTime(NodeCount nodeCount);
     bool shouldContinueSearch(Depth depth, NodeCount nodeCount);
 
+    void decrementMovesLeft();
+
     void setClockDepth(Depth depth);
     void setClockEngineTimeLeft(std::time_t engineTimeLeft);
     void setClockLevel(NodeCount moveCount, std::time_t milliseconds, std::time_t increment);
+    void setMovesLeft(std::uint32_t movesLeft);
     void setClockNodes(NodeCount nodeCount);
     void setClockNps(NodeCount nps);
     void setClockOpponentTimeLeft(std::time_t opponentTimeLeft);

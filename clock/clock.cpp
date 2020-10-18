@@ -41,6 +41,11 @@ std::time_t Clock::getElapsedTime(NodeCount nodeCount)
     return std::time_t(elapsedTime.count());
 }
 
+void Clock::setMovesLeft(std::uint32_t movesLeft)
+{
+    this->movesLeft = movesLeft;
+}
+
 bool Clock::shouldContinueSearch(Depth depth, NodeCount nodeCount)
 {
     if (depth >= Depth::MAX) {
@@ -101,6 +106,11 @@ void Clock::startClock()
 {
     this->minimumDepthReached = false;
     this->startTime = std::chrono::steady_clock::now();
+}
+
+void Clock::decrementMovesLeft()
+{
+    this->movesLeft--;
 }
 
 void Clock::setClockDepth(Depth depth)
