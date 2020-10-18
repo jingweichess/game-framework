@@ -61,13 +61,13 @@ public:
     {
         this->initializeSearch(board);
 
-        Score aspirationWindowDelta;
+        Score aspirationWindowDelta = Score(40);
 
         Score previousScore = NO_SCORE;
         Score alpha = -WIN_SCORE, beta = WIN_SCORE;
         Score bestScore = -WIN_SCORE;
 
-        Depth searchDepth = Depth::ONE * 2;
+        Depth searchDepth = Depth::TWO;
 
         bool isSearching = true;
         bool foundMateSolution = false;
@@ -75,7 +75,7 @@ public:
         while (isSearching) {
             if (enableAspirationWindow
                 && !foundMateSolution
-                && (searchDepth >= Depth::ONE * 3)) {
+                && (searchDepth >= Depth::THREE)) {
                 aspirationWindowDelta = Score(40);
 
                 alpha = std::max(previousScore - aspirationWindowDelta, -WIN_SCORE);
