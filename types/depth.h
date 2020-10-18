@@ -3,8 +3,14 @@
 enum Depth {
     ZERO = 0,
     ONE = 1,
+    TWO = ONE * 2,
+    THREE = ONE * 3,
+    FOUR = ONE * 4,
+    FIVE = ONE * 5,
+    SIX = ONE * 6,
+    SEVEN = ONE * 7,
 
-    MAX = 128
+    MAX = ONE * 128
 };
 
 static Depth operator + (Depth d1, Depth d2)
@@ -20,6 +26,11 @@ static Depth operator - (Depth d1, Depth d2)
 static Depth operator * (Depth d, int i)
 {
     return Depth(int(d) * i);
+}
+
+static Depth operator * (Depth d, float f)
+{
+    return Depth(float(d) * f);
 }
 
 static Depth& operator ++ (Depth& d, int)
