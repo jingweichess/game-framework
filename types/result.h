@@ -11,9 +11,11 @@ static TwoPlayerGameResult operator - (TwoPlayerGameResult gr)
         return TwoPlayerGameResult::WIN;
     case TwoPlayerGameResult::WIN:
         return TwoPlayerGameResult::LOSS;
+    case TwoPlayerGameResult::DRAW:
+        return gr;
+    case TwoPlayerGameResult::NO_GAMERESULT:
+        return gr;
     }
-
-    return gr;
 }
 
 struct TwoPlayerGameSetResult {
