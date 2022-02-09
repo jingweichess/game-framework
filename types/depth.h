@@ -9,6 +9,9 @@ enum Depth {
     FIVE = ONE * 5,
     SIX = ONE * 6,
     SEVEN = ONE * 7,
+    EIGHT = ONE * 8,
+    NINE = ONE * 9,
+    TEN = ONE * 10,
 
     MAX = ONE * 128
 };

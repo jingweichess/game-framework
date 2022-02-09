@@ -35,7 +35,7 @@ std::time_t Clock::getElapsedTime(NodeCount nodeCount)
         return static_cast<int>(1000.0 * nodeCount / this->nps);
     }
 
-    std::chrono::time_point<SteadyClock> currentTime = std::chrono::steady_clock::now();
+    std::chrono::time_point<SteadyClock> currentTime = SteadyClock::now();
     std::chrono::milliseconds elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - this->startTime);
 
     return std::time_t(elapsedTime.count());
@@ -105,7 +105,7 @@ void Clock::initializeClock()
 void Clock::startClock()
 {
     this->minimumDepthReached = false;
-    this->startTime = std::chrono::steady_clock::now();
+    this->startTime = SteadyClock::now();
 }
 
 void Clock::decrementMovesLeft()

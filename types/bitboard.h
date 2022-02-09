@@ -4,4 +4,4 @@
 
 typedef std::uint64_t Bitboard;
 
-static constexpr Bitboard EmptyBitboard = Bitboard(0);
+constexpr Bitboard EmptyBitboard = Bitboard(0);

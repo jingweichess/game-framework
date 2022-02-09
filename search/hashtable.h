@@ -51,8 +51,8 @@ public:
 
     void reset();
 
-    Score scoreFromHash(Score score, Depth currentDepth);
-    Score scoreToHash(Score score, Depth currentDepth);
+    Score scoreFromHash(Score score, Depth currentDepth) const;
+    Score scoreToHash(Score score, Depth currentDepth) const;
 
-    HashtableEntryType search(Hash hashValue, Score& score, Depth currentDepth, Depth& depthLeft, std::uint8_t& custom);
+    HashtableEntryType search(Hash hashValue, Score& score, Depth currentDepth, Depth& depthLeft, std::uint8_t& custom) const;
 };

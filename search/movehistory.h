@@ -41,17 +41,17 @@ public:
         std::uint32_t result = 0;
 
         for (reverse_iterator it = this->moveHistoryList.rbegin(); it != this->moveHistoryList.rend(); ++it) {
-            MoveHistoryStructType& chessMoveHistoryStruct = (*it);
+            MoveHistoryStructType& moveHistoryStruct = (*it);
 
-            if (static_cast<T*>(this)->beforeDuplicateHashCheckImplementation(hashValue, chessMoveHistoryStruct)) {
+            if (static_cast<T*>(this)->beforeDuplicateHashCheckImplementation(hashValue, moveHistoryStruct)) {
                 break;
             }
 
-            if (chessMoveHistoryStruct.hashValue == hashValue) {
+            if (moveHistoryStruct.hashValue == hashValue) {
                 result++;
             }
 
-            if (static_cast<T*>(this)->afterDuplicateHashCheckImplementation(hashValue, chessMoveHistoryStruct)) {
+            if (static_cast<T*>(this)->afterDuplicateHashCheckImplementation(hashValue, moveHistoryStruct)) {
                 break;
             }
         }

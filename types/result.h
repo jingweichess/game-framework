@@ -1,5 +1,7 @@
 #pragma once
 
+#include "nodecount.h"
+
 enum TwoPlayerGameResult {
     LOSS, DRAW, WIN, NO_GAMERESULT
 };

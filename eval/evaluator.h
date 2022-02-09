@@ -7,8 +7,6 @@
 template <class T, class Board>
 class Evaluator
 {
-protected:
-
 public:
     using BoardType = Board;
 
@@ -17,11 +15,11 @@ public:
 
     Score evaluate(BoardType& board, Score alpha, Score beta)
     {
-        return static_cast<T*>(this)->evaluateImplementation(board, alpha, beta);
+        return static_cast<T *>(this)->evaluateImplementation(board, alpha, beta);
     }
 
     Score lazyEvaluate(BoardType& board)
     {
-        return static_cast<T*>(this)->lazyEvaluateImplementation(board);
+        return static_cast<T *>(this)->lazyEvaluateImplementation(board);
     }
 };

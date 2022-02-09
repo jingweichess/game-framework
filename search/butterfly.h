@@ -10,7 +10,7 @@ protected:
 public:
     ButterflyTable()
     {
-
+        this->reset();
     }
 
     ~ButterflyTable()

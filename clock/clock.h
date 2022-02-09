@@ -12,10 +12,10 @@ enum ClockType {
     SEARCHTIME, SEARCHDEPTH, SEARCHNODES, SEARCHLEVEL
 };
 
-typedef std::chrono::steady_clock SteadyClock;
-
 class Clock {
 protected:
+    using SteadyClock = std::chrono::steady_clock;
+
     ClockType clockType;
 
     Depth maxSearchDepth;

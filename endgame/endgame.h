@@ -35,13 +35,13 @@ public:
     {
         Hash materialHash = board.materialHashValue;
 
-        if (Endgame::endgameFunctionMap.count(materialHash) == 0) {
-            Endgame::endgameFunctionMap[materialHash] = Endgame::nullEndgameFunction;
-
-            return false;
+        if (Endgame::endgameFunctionMap.count(materialHash) > 0) {
+            EndgameFunctionType endgameFunction = Endgame::endgameFunctionMap.at(materialHash);
+            return endgameFunction(board, score);
         }
 
-        EndgameFunctionType endgameFunction = Endgame::endgameFunctionMap.at(materialHash);
-        return endgameFunction(board, score);
+        Endgame::endgameFunctionMap[materialHash] = Endgame::nullEndgameFunction;
+
+        return false;
     }
 };

@@ -4,4 +4,4 @@
 
 typedef std::uint64_t NodeCount;
 
-static constexpr NodeCount ZeroNodes = NodeCount(0);
+constexpr NodeCount ZeroNodes = NodeCount(0);

@@ -11,10 +11,9 @@ public:
     GameBoard() {}
     ~GameBoard() {}
 
-    template<bool performPreCalculations = true>
     void doMove(MoveType& move)
     {
-        static_cast<T*>(this)->doMoveImplementation<performPreCalculations>(move);
+        static_cast<T*>(this)->doMoveImplementation(move);
     }
 
     void resetSpecificPosition(std::string& fen)

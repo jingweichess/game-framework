@@ -126,12 +126,18 @@ public:
                 aspirationWindowDelta += Score(40);
             }
 
-
             if (this->wasSearchAborted()) {
                 break;
             }
 
-            isSearching = this->clock.shouldContinueSearch(searchDepth, this->getNodeCount());
+            if (foundMateSolution) {
+                Depth distanceToMate = DistanceToMate(score);
+                if (searchDepth > distanceToMate * 3) {
+                    isSearching = false;
+                }
+            }
+
+            isSearching = isSearching && this->clock.shouldContinueSearch(searchDepth, this->getNodeCount());
 
             previousScore = score;
             searchDepth++;

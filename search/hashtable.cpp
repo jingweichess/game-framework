@@ -39,15 +39,15 @@ void Hashtable::insert(Hash hashValue, Score score, Depth currentDepth, Depth de
     std::uint32_t position = hashValue & (this->hashEntryCount - 1);
     HashtableEntry* oldHashtableEntry = this->hashEntryList + position;
 
-    if (oldHashtableEntry->hashValue == hashValue) {
-        HashtableAge oldHashtableAge = oldHashtableEntry->age;
-        HashtableDepth oldHashtableDepth = oldHashtableEntry->depthLeft;
+    //if (oldHashtableEntry->hashValue == hashValue) {
+    //    HashtableAge oldHashtableAge = oldHashtableEntry->age;
+    //    HashtableDepth oldHashtableDepth = oldHashtableEntry->depthLeft;
 
-        if (this->currentAge == oldHashtableAge
-            && depthLeft <= oldHashtableDepth) {
-            return;
-        }
-    }
+    //    if (this->currentAge == oldHashtableAge
+    //        && depthLeft <= oldHashtableDepth) {
+    //        return;
+    //    }
+    //}
 
     HashtableEntry hashtableEntry;
 
@@ -75,7 +75,7 @@ void Hashtable::reset()
     }
 }
 
-Score Hashtable::scoreFromHash(Score score, Depth currentDepth)
+Score Hashtable::scoreFromHash(Score score, Depth currentDepth) const
 {
     if (score >= WIN_SCORE - Depth::MAX) {
         return score - currentDepth;
@@ -87,7 +87,7 @@ Score Hashtable::scoreFromHash(Score score, Depth currentDepth)
     return score;
 }
 
-Score Hashtable::scoreToHash(Score score, Depth currentDepth)
+Score Hashtable::scoreToHash(Score score, Depth currentDepth) const
 {
     if (score >= WIN_SCORE - Depth::MAX) {
         return score + currentDepth;
@@ -99,7 +99,7 @@ Score Hashtable::scoreToHash(Score score, Depth currentDepth)
     return score;
 }
 
-HashtableEntryType Hashtable::search(Hash hashValue, Score& score, Depth currentDepth, Depth& depthLeft, std::uint8_t& custom)
+HashtableEntryType Hashtable::search(Hash hashValue, Score& score, Depth currentDepth, Depth& depthLeft, std::uint8_t& custom) const
 {
     std::uint32_t position = hashValue & (this->hashEntryCount - 1);
     HashtableEntry* hashtableEntry = this->hashEntryList + position;
