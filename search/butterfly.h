@@ -27,7 +27,7 @@ public:
         return history;
     }
 
-    std::uint32_t get(std::uint32_t x, std::uint32_t y)
+    std::uint32_t get(std::uint32_t x, std::uint32_t y) const
     {
         return this->scores[x][y];
     }

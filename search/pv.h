@@ -58,7 +58,7 @@ public:
         static_cast<T*>(this)->printMoveToConsoleImplementation(move);
     }
 
-    size_type size()
+    size_type size() const
     {
         return this->moveList.size();
     }

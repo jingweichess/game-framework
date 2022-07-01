@@ -8,12 +8,12 @@ class GameBoard
 public:
     using MoveType = Move;
 
-    GameBoard() {}
-    ~GameBoard() {}
+    constexpr GameBoard() = default;
+    constexpr ~GameBoard() = default;
 
-    void doMove(MoveType& move)
+    constexpr bool doMove(MoveType& move)
     {
-        static_cast<T*>(this)->doMoveImplementation(move);
+        return static_cast<T*>(this)->doMoveImplementation(move);
     }
 
     void resetSpecificPosition(std::string& fen)

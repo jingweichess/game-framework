@@ -1,6 +1,8 @@
 #pragma once
 
 #include <algorithm>
+
+#include <cstdio>
 #include <cstdint>
 
 #include "pv.h"

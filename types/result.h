@@ -1,12 +1,14 @@
 #pragma once
 
+#include <cassert>
+
 #include "nodecount.h"
 
 enum TwoPlayerGameResult {
     LOSS, DRAW, WIN, NO_GAMERESULT
 };
 
-static TwoPlayerGameResult operator - (TwoPlayerGameResult gr)
+constexpr TwoPlayerGameResult operator - (TwoPlayerGameResult gr)
 {
     switch (gr) {
     case TwoPlayerGameResult::LOSS:
@@ -17,6 +19,8 @@ static TwoPlayerGameResult operator - (TwoPlayerGameResult gr)
         return gr;
     case TwoPlayerGameResult::NO_GAMERESULT:
         return gr;
+    default:
+        assert(0);
     }
 }
 
@@ -25,6 +29,6 @@ struct TwoPlayerGameSetResult {
     NodeCount bookDepth;
 };
 
-typedef std::uint32_t GameResultCount;
+using GameResultCount = std::uint32_t;
 
 constexpr GameResultCount ZeroGameResultCount = GameResultCount(0);

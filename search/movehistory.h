@@ -14,18 +14,10 @@ public:
     using MoveHistoryStructType = MoveHistoryStruct;
     using MoveType = typename BoardType::MoveType;
 
-    using reverse_iterator = typename std::vector<MoveHistoryStruct>::reverse_iterator;
     using size_type = typename std::vector<MoveHistoryStruct>::size_type;
 
-    MoveHistory()
-    {
-
-    }
-
-    ~MoveHistory()
-    {
-
-    }
+    MoveHistory() = default;
+    ~MoveHistory() = default;
 
     void addMoveToHistory(BoardType& board, MoveType& move)
     {
@@ -36,14 +28,14 @@ public:
         this->moveHistoryList.push_back(moveHistoryStruct);
     }
 
-    std::uint32_t checkForDuplicateHash(Hash hashValue)
+    std::uint32_t checkForDuplicateHash(Hash hashValue) const
     {
         std::uint32_t result = 0;
 
-        for (reverse_iterator it = this->moveHistoryList.rbegin(); it != this->moveHistoryList.rend(); ++it) {
-            MoveHistoryStructType& moveHistoryStruct = (*it);
+        for (auto it = this->moveHistoryList.rbegin(); it != this->moveHistoryList.rend(); ++it) {
+            const MoveHistoryStructType& moveHistoryStruct = (*it);
 
-            if (static_cast<T*>(this)->beforeDuplicateHashCheckImplementation(hashValue, moveHistoryStruct)) {
+            if (static_cast<const T*>(this)->beforeDuplicateHashCheckImplementation(hashValue, moveHistoryStruct)) {
                 break;
             }
 
@@ -51,7 +43,7 @@ public:
                 result++;
             }
 
-            if (static_cast<T*>(this)->afterDuplicateHashCheckImplementation(hashValue, moveHistoryStruct)) {
+            if (static_cast<const T*>(this)->afterDuplicateHashCheckImplementation(hashValue, moveHistoryStruct)) {
                 break;
             }
         }

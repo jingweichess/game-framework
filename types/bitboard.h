@@ -2,6 +2,6 @@
 
 #include <cstdint>
 
-typedef std::uint64_t Bitboard;
+using Bitboard = std::uint64_t;
 
 constexpr Bitboard EmptyBitboard = Bitboard(0);

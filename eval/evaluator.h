@@ -10,8 +10,8 @@ class Evaluator
 public:
     using BoardType = Board;
 
-    Evaluator() {}
-    ~Evaluator() {}
+    Evaluator() = default;
+    ~Evaluator() = default;
 
     Score evaluate(BoardType& board, Score alpha, Score beta)
     {

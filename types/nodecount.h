@@ -2,6 +2,6 @@
 
 #include <cstdint>
 
-typedef std::uint64_t NodeCount;
+using NodeCount = std::uint64_t;
 
 constexpr NodeCount ZeroNodes = NodeCount(0);

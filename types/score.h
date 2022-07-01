@@ -4,22 +4,23 @@
 
 #include "depth.h"
 
-typedef std::int32_t Score;
+using Score = std::int32_t;
 
-constexpr Score BASICALLY_WINNING_SCORE = 3000;
 constexpr Score DRAW_SCORE = 0;
 constexpr Score NO_SCORE = 0;
 constexpr Score UNIT_SCORE = 256;
 constexpr Score WIN_SCORE = 32000;
 constexpr Score ZERO_SCORE = 0;
 
-static bool IsMateScore(Score score)
+constexpr Score BASICALLY_WINNING_SCORE = UNIT_SCORE * 15;
+
+constexpr bool IsMateScore(Score score)
 {
     return (score < (-WIN_SCORE + Depth::MAX)) ||
         (score > (WIN_SCORE - Depth::MAX));
 }
 
-static Depth DistanceToMate(Score score)
+constexpr Depth DistanceToMate(Score score)
 {
     if (score > (WIN_SCORE - Depth::MAX)) {
         return Depth::ONE * (WIN_SCORE - score);
@@ -33,9 +34,7 @@ static Depth DistanceToMate(Score score)
 }
 
 #if defined(USE_M128I)
-#include <emmintrin.h>
 #include <immintrin.h>
-#include <smmintrin.h>
 
 static __m128i zerovector = _mm_setr_epi32(0, 0, 0, 0);
 #endif
@@ -49,14 +48,21 @@ union Evaluation {
     __m128i vector;
 #endif
 
-    Score operator()(std::int32_t phase) const
+    constexpr Evaluation() : mg(0), eg(0), pad0(0), pad1(0) {}
+    constexpr Evaluation(Score mg, Score eg) : mg(mg), eg(eg), pad0(0), pad1(0) {}
+    constexpr ~Evaluation() {}
+
+    constexpr Score operator()(std::int32_t phase) const
     {
         Score result = ((this->mg * phase) + (this->eg * (32 - phase))) / 32;
 
         return result;
     }
 
-    Evaluation& operator += (const Evaluation &e2)
+#ifndef USE_M128I
+    constexpr
+#endif
+    Evaluation& operator += (const Evaluation e2)
     {
 #if defined(USE_M128I)
         this->vector = _mm_add_epi32(this->vector, e2.vector);
@@ -69,12 +75,27 @@ union Evaluation {
         return *this;
     }
 
-    friend Evaluation operator + (Evaluation e1, const Evaluation& e2)
+#ifndef USE_M128I
+    constexpr
+#endif
+    friend Evaluation operator + (const Evaluation e1, const Evaluation e2)
     {
-        return e1 += e2;
+        Evaluation result;
+
+#if defined(USE_M128I)
+        result.vector = _mm_add_epi32(e1.vector, e2.vector);
+#else
+        result.mg = e1.mg + e2.mg;
+        result.eg = e1.eg + e2.eg;
+#endif
+
+        return result;
     }
 
-    Evaluation& operator -= (const Evaluation &e2)
+#ifndef USE_M128I
+    constexpr
+#endif
+    Evaluation& operator -= (const Evaluation e2)
     {
 #if defined(USE_M128I)
         this->vector = _mm_sub_epi32(this->vector, e2.vector);
@@ -86,11 +107,26 @@ union Evaluation {
         return *this;
     }
 
-    friend Evaluation operator - (Evaluation e1, const Evaluation& e2)
+#ifndef USE_M128I
+    constexpr
+#endif
+    friend Evaluation operator - (const Evaluation e1, const Evaluation e2)
     {
-        return e1 -= e2;
+        Evaluation result;
+
+#if defined(USE_M128I)
+        result.vector = _mm_sub_epi32(e1.vector, e2.vector);
+#else
+        result.mg = e1.mg - e2.mg;
+        result.eg = e1.eg - e2.eg;
+#endif
+
+        return result;
     }
 
+#ifndef USE_M128I
+    constexpr
+#endif
     Evaluation operator - ()
     {
 #if defined(USE_M128I)
@@ -103,7 +139,10 @@ union Evaluation {
 #endif
     }
 
-    Evaluation operator * (const std::int32_t &i)
+#ifndef USE_M128I
+    constexpr
+#endif
+    Evaluation operator * (const std::int32_t i)
     {
         Evaluation result;
 
@@ -112,42 +151,67 @@ union Evaluation {
 
         result.vector = _mm_mullo_epi32(this->vector, ivector);
 #else
-        result = Evaluation{ this->mg * i, this->eg * i };
+        result.mg = this->mg * i;
+        result.eg = this->eg * i;
 #endif
 
         return result;
     }
 
-    Evaluation operator / (const std::int32_t &i)
+#ifndef USE_M128I
+    constexpr
+#endif
+    Evaluation operator / (const std::int32_t i)
     {
         Evaluation result;
 
-#if defined(USE_M128I) and defined(_MSC_VER)
-        __m128i ivector = _mm_setr_epi32(i, i, i, i);
+//#if defined(USE_M128I) and defined(_MSC_VER)
+//        __m128i ivector = _mm_setr_epi32(i, i, i, i);
 
-        result.vector = _mm_div_epi32(this->vector, ivector);
-#else
-        result = Evaluation{ this->mg / i, this->eg / i };
-#endif
+//        result.vector = _mm_div_epi32(this->vector, ivector);
+//#else
+        result.mg = this->mg / i;
+        result.eg = this->eg / i;
+//#endif
 
         return result;
     }
 
+#ifndef USE_M128I
+    constexpr
+#endif
     bool operator == (Evaluation e2)
     {
-#if defined(USE_M128I) and defined(HAS_AVX512)
-        __mmask8 mask = _mm_cmpeq_epi32_mask(e1.vector, e2.vector);
+#if defined(USE_M128I)
+        __m128i result = _mm_cmpeq_epi32(this->vector, e2.vector);
+        std::uint64_t spread[2];
 
-        //The mask that is returned has a bit set for each 32 bit element in the vector that is equal.  The
-        //  4 higher bits are always 0.  If all 4 lower bits are set, this indicates the two vectors are equal.
-        return mask & 0x07 != 0;
+        _mm_store_si128((__m128i*)spread, result);
+
+        return spread != 0x0;
 #else
         return (this->mg == e2.mg) && (this->eg == e2.eg);
 #endif
     }
 };
 
-static Evaluation operator * (std::int32_t i, Evaluation e)
+#ifndef USE_M128I
+constexpr
+#else
+static
+#endif
+Evaluation operator * (std::int32_t i, const Evaluation e)
 {
-    return e * i;
+    Evaluation result;
+
+#if defined(USE_M128I)
+    __m128i ivector = _mm_setr_epi32(i, i, i, i);
+
+    result.vector = _mm_mullo_epi32(e.vector, ivector);
+#else
+    result.mg = e.mg * i;
+    result.eg = e.eg * i;
+#endif
+
+    return result;
 }

@@ -7,14 +7,15 @@
 #include "../types/hash.h"
 #include "../types/score.h"
 
-typedef std::uint8_t HashtableAge;
-typedef std::int8_t HashtableDepth;
-typedef std::uint8_t HashtableEntryType;
+using HashtableAge = std::uint8_t;
+using HashtableDepth = std::int8_t;
 
-static constexpr HashtableEntryType HASHENTRYTYPE_NONE = 0;
-static constexpr HashtableEntryType HASHENTRYTYPE_EXACT_VALUE = 1;
-static constexpr HashtableEntryType HASHENTRYTYPE_LOWER_BOUND = 2;
-static constexpr HashtableEntryType HASHENTRYTYPE_UPPER_BOUND = 3;
+enum HashtableEntryType : std::uint8_t {
+    HASHENTRYTYPE_NONE,
+    HASHENTRYTYPE_EXACT_VALUE,
+    HASHENTRYTYPE_LOWER_BOUND,
+    HASHENTRYTYPE_UPPER_BOUND
+};
 
 struct HashtableEntry {
     union {
@@ -31,6 +32,8 @@ struct HashtableEntry {
 #endif
     };
 };
+
+static_assert(sizeof(HashtableEntry) == 16);
 
 class Hashtable
 {

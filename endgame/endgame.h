@@ -11,37 +11,37 @@ class Endgame
 {
 public:
     using BoardType = Board;
-    using EndgameFunctionType = bool (*) (BoardType& board, Score& score);
+    using EndgameFunctionType = bool (*) (const BoardType& board, Score& score);
     using EndgameFunctionMapType = std::map<Hash, EndgameFunctionType>;
 
 protected:
     EndgameFunctionMapType endgameFunctionMap;
 
-    static bool nullEndgameFunction(BoardType& board, Score& score)
+    static constexpr bool nullEndgameFunction(const BoardType& board, Score& score)
     {
         return false;
     }
 public:
-    Endgame() {}
-    ~Endgame() {}
+    constexpr Endgame() = default;
+    constexpr ~Endgame() = default;
 
-    void add(BoardType& board, EndgameFunctionType& endgameFunction)
+    constexpr bool add(const BoardType& board, const EndgameFunctionType& endgameFunction)
     {
         Hash materialHash = board.materialHashValue;
         Endgame::endgameFunctionMap[materialHash] = endgameFunction;
+
+        return true;
     }
      
-    bool probe(BoardType& board, Score& score)
+    constexpr bool probe(const BoardType& board, Score& score)
     {
         Hash materialHash = board.materialHashValue;
 
-        if (Endgame::endgameFunctionMap.count(materialHash) > 0) {
-            EndgameFunctionType endgameFunction = Endgame::endgameFunctionMap.at(materialHash);
-            return endgameFunction(board, score);
+        if (Endgame::endgameFunctionMap.count(materialHash) == 0) {
+            Endgame::endgameFunctionMap[materialHash] = Endgame::nullEndgameFunction;
         }
 
-        Endgame::endgameFunctionMap[materialHash] = Endgame::nullEndgameFunction;
-
-        return false;
+        EndgameFunctionType& endgameFunction = Endgame::endgameFunctionMap.at(materialHash);
+        return endgameFunction(board, score);
     }
 };

@@ -2,6 +2,6 @@
 
 #include <cstdint>
 
-typedef std::uint64_t Hash;
+using Hash = std::uint64_t;
 
-static constexpr Hash EmptyHash = Hash(0);
+constexpr Hash EmptyHash = Hash(0);

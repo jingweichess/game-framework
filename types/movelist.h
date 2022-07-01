@@ -2,5 +2,5 @@
 
 #include <vector>
 
-template <class Move>
-using MoveList = std::vector<Move>;
+template <class MoveType>
+using MoveList = std::vector<MoveType>;
