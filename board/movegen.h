@@ -12,7 +12,7 @@ public:
 	using BoardType = Board;
 	using MoveType = typename BoardType::MoveType;
 
-	NodeCount generateAllMoves(const BoardType& board, MoveList<MoveType>& moveList, bool countOnly = false) const
+	constexpr NodeCount generateAllMoves(const BoardType& board, MoveList<MoveType>& moveList, bool countOnly = false) const
 	{
 		return static_cast<const T *>(this)->generateAllMovesImplementation(board, moveList, countOnly);
 	}
